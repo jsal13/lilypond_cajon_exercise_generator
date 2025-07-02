@@ -1,4 +1,9 @@
 *.png
+*.pdf
+*.count
+*.tex
+*.texi
+*.eps
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
