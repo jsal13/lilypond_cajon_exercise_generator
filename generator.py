@@ -32,22 +32,44 @@ def create_svgs(filepath: str, output_prefix: str) -> None:
     for filename in glob.glob(os.path.join(filepath, "*.txt")):
         with open(os.path.join(os.getcwd(), filename), "r") as f:
             content = f.read()
-            exercises: list[tuple[str, ...]] = [
-                tuple(c.split("\n")) for c in content.split("\n:\n")
+            content_R: str = content
+            # Do this so that we don't have a circular replacement.
+            content_L: str = content.replace("\"R\"", "\"X\"").replace("\"L\"", "\"R\"").replace("\"X\"", "\"L\"")
+            exercises_R: list[tuple[str, ...]] = [
+                tuple(c.split("\n")) for c in content_R.split("\n:\n")
+            ]
+            exercises_L: list[tuple[str, ...]] = [
+                tuple(c.split("\n")) for c in content_L.split("\n:\n")
             ]
 
-        for exercise in exercises:
-            assert len(exercise) == 2, "Each exercise must have exactly two voices."
-            voice_1, voice_2 = exercise
-            exercise_number = exercises.index(exercise) + 1
+        for idx in range(len(exercises_R)):
+            assert len(exercises_R[idx]) == 2
+            assert len(exercises_L[idx]) == 2
+            
+            # Do right side first.  I should know a better way to do this.
+            voice_1_R, voice_2_R = exercises_R[idx]
+            exercise_number_R = idx + 1
             with open(
                 os.path.join(
-                    "./output", f"{output_prefix}__exercise_{exercise_number}.ly"
+                    "./output", f"{output_prefix}__exercise_{exercise_number_R}_RIGHT.ly"
                 ),
                 "w+",
             ) as ly_file:
-                lpe = LilyPondExercise(voice_1=voice_1, voice_2=voice_2)
+                lpe = LilyPondExercise(voice_1=voice_1_R, voice_2=voice_2_R)
                 ly_file.write(lpe.generate())
+
+            # Now left side.
+            voice_1_L, voice_2_L = exercises_L[idx]
+            exercise_number_L = idx + 1
+            with open(
+                os.path.join(
+                    "./output", f"{output_prefix}__exercise_{exercise_number_L}_LEFT.ly"
+                ),
+                "w+",
+            ) as ly_file:
+                lpe = LilyPondExercise(voice_1=voice_1_L, voice_2=voice_2_L)
+                ly_file.write(lpe.generate())
+
 
         for filepath in glob.glob(
             os.path.join("./output", f"{output_prefix}__exercise_*.ly")
@@ -67,6 +89,9 @@ def create_svgs(filepath: str, output_prefix: str) -> None:
         for png_file in glob.glob(os.path.join("./output", "*.png")):
             if "cropped" not in png_file:
                 os.remove(png_file)
+            if "cropped" in png_file:
+                new_name = png_file.replace(".cropped", "")
+                os.rename(png_file, new_name)
         
         for ly_filepath in glob.glob(os.path.join("./output", "*.ly")):
             os.remove(ly_filepath)
