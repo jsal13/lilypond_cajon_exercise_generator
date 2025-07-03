@@ -1,11 +1,11 @@
 
-bd4^"R" s s s bd4^"R" s s s
+bd4^"R" r r r bd4^"R" r r r
 :
 
-bd4^"R" s bd4^"R" s bd4^"R" s bd4^"R" s
+bd4^"R" r bd4^"R" r bd4^"R" r bd4^"R" r
 :
 
-bd4^"R" s bd4^"L" s bd4^"R" s bd4^"L" s
+bd4^"R" r bd4^"L" r bd4^"R" r bd4^"L" r
 :
 
 bd4^"R" bd4^"R" bd4^"R" bd4^"R" bd4^"R" bd4^"R" bd4^"R" bd4^"R"

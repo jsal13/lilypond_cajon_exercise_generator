@@ -29,7 +29,7 @@ class LilyPondExercise:
 
 
 def create_svgs(filepath: str, output_prefix: str) -> None:
-    for filename in glob.glob(os.path.join(filepath, "*.txt")):
+    for filename in glob.glob(filepath):
         with open(os.path.join(os.getcwd(), filename), "r") as f:
             content = f.read()
             content_R: str = content
@@ -87,8 +87,6 @@ def create_svgs(filepath: str, output_prefix: str) -> None:
 
         # Cleanup the tons of unnecessary files in output directory.
         for png_file in glob.glob(os.path.join("./output", "*.png")):
-            if "cropped" not in png_file:
-                os.remove(png_file)
             if "cropped" in png_file:
                 new_name = png_file.replace(".cropped", "")
                 os.rename(png_file, new_name)
@@ -120,6 +118,9 @@ def create_svgs(filepath: str, output_prefix: str) -> None:
 
 
 if __name__ == "__main__":
-    # Specify the directory containing the text files
-    filepath: str = "./basic/bass_only/"
-    create_svgs(filepath=filepath, output_prefix="bass_only")
+
+    # filepath_bo: str = "./basic/bass_only/exercises.txt"
+    # create_svgs(filepath=filepath_bo, output_prefix="bass_only")
+
+    filepath_boa: str = "./basic/bass_only/exercises_accents.txt"
+    create_svgs(filepath=filepath_boa, output_prefix="bass_only_accents")
